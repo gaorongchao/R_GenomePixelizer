@@ -1,0 +1,8 @@
+name parameter
+frame_y 100
+chr_color  gray
+chr_thick 10
+size_zhaosili 10
+gene_file CO_all_3.txt
+gene_pch 15
+gene_lwd 5

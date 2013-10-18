@@ -1,0 +1,56 @@
+R 实现神灯图的功能
+==========================
+
+# 确定框架的大小
+  首先画一个空白的坐标
+  need 要包含的信息
+  框架的大小,包括长和宽，染色体的颜色，
+  
+```{r}
+# 设置图片的大小
+#png("fileout.png",width=1000,height=1000,bg="white")
+need=read.table("need.txt",header=TRUE,row.names="name",stringsAsFactors=FALSE)
+#as.numeric(as.character(need["frame_y",1]))
+#class(need)
+
+chr=read.table("chr.txt",header=TRUE)
+
+zhaosili=read.table("zhaosili.txt",header=TRUE)
+#need
+#应该控制图像的大小
+y=as.numeric(need["frame_y",1])
+plot(0,0,xlim=c(0,max(chr$length)+10),ylim=c(0,y),type="n",axes=FALSE)
+#ylab=c(0,20,40,60,80,100)
+ylab=seq(from=0,to=y,by=y/5)
+
+#ylab #?seq
+axis(2,at=ylab,labels=ylab,col.axis="red",las=2)
+
+# 画染色体
+#首先用R来画横线，根据染色体的长度
+#abline是添加直线，然后用R
+## 然后用abline添加横线
+
+#segments(2,3,x1=50,y1=3,col="gray",lwd=10)
+chr=read.table("chr.txt",header=TRUE)
+chr_num=length(chr$chr)
+chr_height=round(100/chr_num,0)
+chr_thick=as.numeric(need["chr_thick",1])
+segments(5,chr_height*(chr_num+1-chr$chr)-chr_height/2,5+chr$length,chr_height*(chr_num+1-chr$chr)-chr_height/2,col=need["chr_color",1],lwd=chr_thick)
+
+
+
+# 添加着丝粒的位置
+segments(zhaosili$pos+5,chr_height*(chr_num+1-chr$chr)-chr_height/2,zhaosili$pos+5,chr_height*(chr_num+1-chr$chr)-chr_height/2,pch=16,col="red",lwd=as.numeric(need["size_zhaosili",1]))
+
+
+# 添加gene的位置
+gene=read.table(need["gene_file",1],header=TRUE,stringsAsFactors=FALSE)
+
+segments(gene$pos+5,chr_height*(chr_num+1-gene$chr)-chr_height/2+(chr_thick/4),gene$pos+5,chr_height*(chr_num+1-gene$chr)-chr_height/2+(chr_thick/4),lwd=as.numeric(need["gene_lwd",1]),pch=as.numeric(need["gene_pch",1]),col=gene$color)
+as.numeric(need["gene_lwd",1])
+gene$color
+
+?plot
+?png
+```
