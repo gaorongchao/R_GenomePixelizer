@@ -51,6 +51,10 @@ need["gene_pch",1]
 as.numeric(need["gene_pch",1])
 # 添加gene的位置
 gene=read.table(need["gene_file",1],header=TRUE,stringsAsFactors=FALSE)
-#segments(gene$pos+5,chr_height*(chr_num+1-gene$chr)-chr_height/2+chr_thick-3*y/1000,gene$pos+5,chr_height*(chr_num+1-gene$chr)-chr_height/2+chr_thick-3*5/1000,lwd=as.numeric(need["gene_lwd",1]),pch=as.numeric(need["gene_pch",1]),col=gene$color)
+segments(gene$pos+5,chr_height*(chr_num+1-gene$chr)-chr_height/2+chr_thick-3*y/1000,gene$pos+5,chr_height*(chr_num+1-gene$chr)-chr_height/2+chr_thick-3*5/1000,lwd=as.numeric(need["gene_lwd",1]),pch=as.numeric(need["gene_pch",1]),col=gene$color)
+
+
+#添加基因间的相互作用
+
 
 ```
