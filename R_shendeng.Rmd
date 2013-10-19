@@ -8,8 +8,9 @@ R 实现神灯图的功能
   
 ```{r}
 # 设置图片的大小
-#png("fileout.png",width=1000,height=1000,bg="white")
 need=read.table("need.txt",header=TRUE,row.names="name",stringsAsFactors=FALSE)
+y=as.numeric(need["frame_y",1])
+png("fileout.png",width=1000,height=y,bg="white")
 #as.numeric(as.character(need["frame_y",1]))
 #class(need)
 
@@ -18,10 +19,9 @@ chr=read.table("chr.txt",header=TRUE)
 zhaosili=read.table("zhaosili.txt",header=TRUE)
 #need
 #应该控制图像的大小
-y=as.numeric(need["frame_y",1])
 plot(0,0,xlim=c(0,max(chr$length)+10),ylim=c(0,y),type="n",axes=FALSE)
 #ylab=c(0,20,40,60,80,100)
-ylab=seq(from=0,to=y,by=y/5)
+ylab=seq(from=0,to=y,by=y/10)
 
 #ylab #?seq
 axis(2,at=ylab,labels=ylab,col.axis="red",las=2)
@@ -34,8 +34,11 @@ axis(2,at=ylab,labels=ylab,col.axis="red",las=2)
 #segments(2,3,x1=50,y1=3,col="gray",lwd=10)
 chr=read.table("chr.txt",header=TRUE)
 chr_num=length(chr$chr)
-chr_height=round(100/chr_num,0)
+chr_height=round(y/chr_num,0)
 chr_thick=as.numeric(need["chr_thick",1])
+#segments(5,150,10,150,col="red",lwd=10,)
+#abline(h=175)
+#abline(h=160)
 segments(5,chr_height*(chr_num+1-chr$chr)-chr_height/2,5+chr$length,chr_height*(chr_num+1-chr$chr)-chr_height/2,col=need["chr_color",1],lwd=chr_thick)
 
 
@@ -44,13 +47,10 @@ segments(5,chr_height*(chr_num+1-chr$chr)-chr_height/2,5+chr$length,chr_height*(
 segments(zhaosili$pos+5,chr_height*(chr_num+1-chr$chr)-chr_height/2,zhaosili$pos+5,chr_height*(chr_num+1-chr$chr)-chr_height/2,pch=16,col="red",lwd=as.numeric(need["size_zhaosili",1]))
 
 
+need["gene_pch",1]
+as.numeric(need["gene_pch",1])
 # 添加gene的位置
 gene=read.table(need["gene_file",1],header=TRUE,stringsAsFactors=FALSE)
+#segments(gene$pos+5,chr_height*(chr_num+1-gene$chr)-chr_height/2+chr_thick-3*y/1000,gene$pos+5,chr_height*(chr_num+1-gene$chr)-chr_height/2+chr_thick-3*5/1000,lwd=as.numeric(need["gene_lwd",1]),pch=as.numeric(need["gene_pch",1]),col=gene$color)
 
-segments(gene$pos+5,chr_height*(chr_num+1-gene$chr)-chr_height/2+(chr_thick/4),gene$pos+5,chr_height*(chr_num+1-gene$chr)-chr_height/2+(chr_thick/4),lwd=as.numeric(need["gene_lwd",1]),pch=as.numeric(need["gene_pch",1]),col=gene$color)
-as.numeric(need["gene_lwd",1])
-gene$color
-
-?plot
-?png
 ```
