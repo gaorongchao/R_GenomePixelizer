@@ -1,0 +1,150 @@
+```{r}
+library(grid)
+data=read.table("data3.txt",header=TRUE)
+dim(data)[1]
+data$height=250-data$sample
+# 数据处理
+for ( i in 1:7)
+  {
+  data1=subset(data,sample==i)
+  min=min(min(data1$start),min(data1$end))
+  for(j in 1:dim(data)[1])
+    {
+    if (isTRUE(data$sample[j]==i))
+      {
+      data$start1[j]=data$start[j]-min+3000
+      data$end1[j]=data$end[j]-min+3000
+      }
+    }
+  }
+max_all=max(data$start1,data$end1)
+
+# 把空白片段删除，而不是把短片段扩增
+data1=subset(data,sample==1)
+data1_1=data1[order(data1$start1),]
+
+data2=subset(data,sample==2)
+data2_1=data2[order(data2$start1),]
+
+data3=subset(data,sample==3)
+data3_1=data3[order(data3$start1),]
+for ( i in 1:5)
+  {
+  if (data3_1$start1[i]>2800000)
+    {
+    data3_1$start1[i]=data3_1$start1[i]-2800000
+    data3_1$end1[i]=data3_1$end1[i]-2800000
+    }
+  }
+
+data4=subset(data,sample==4)
+data4_1=data4[order(data4$start1),]
+for (i in 1:5)
+  {
+  if (data4_1$start1[i]>2000000)
+    {
+    data4_1$start1[i] = data4_1$start1[i]-2000000
+    data4_1$end1[i] = data4_1$end1[i]-2000000
+    }
+  }
+for (i in 1:5)
+  {
+  if (data4_1$start1[i]>400000)
+    {
+    data4_1$start1[i] = data4_1$start1[i]-100000
+    data4_1$end1[i] = data4_1$end1[i]-100000
+    }
+  }
+data5=subset(data,sample==5)
+data5_1=data5[order(data5$start1),]
+for (i in 1:12)
+  {
+  if (data5_1$start1[i]>2430000)
+    {
+    data5_1$start1[i] = data5_1$start1[i]-2430000
+    data5_1$end1[i] = data5_1$end1[i]-2430000
+    }
+  }
+for (i in 1:12)
+  {
+  if (data5_1$start1[i]>140000)
+    {
+    data5_1$start1[i] = data5_1$start1[i]-140000
+    data5_1$end1[i] = data5_1$end1[i]-140000
+    }
+  }
+for (i in 1:12)
+  {
+  if (data5_1$start1[i]>300000)
+    {
+    data5_1$start1[i] = data5_1$start1[i]-330000
+    data5_1$end1[i] = data5_1$end1[i]-330000
+    }
+  }
+
+data6=subset(data,sample==6)
+data6_1=data6[order(data6$start1),]
+data6_1$start1=10*data6$start1
+data6_1$end1=10*data6$end1
+
+data7=subset(data,sample==7)
+data7_1=data7[order(data7$start1),]
+data7_1$start1=10*data7$start1
+data7_1$end1=10*data7$end1
+
+col=rainbow(7)
+col=c(col,"#000000")
+
+data_use=rbind(data1_1,data2_1,data3_1,data4_1,data5_1,data6_1,data7_1)
+data_use$height=250-30*data_use$sample
+# 画线
+plot(0,0,xlim=c(0,max(data_use$start1,data_use$end1)),ylim=c(0,250),type="n",)#axes=FALSE,xlab="",ylab="")
+for (i in 1:7)
+  {
+  data10=subset(data_use,sample==i)
+  max=max(data10$start10,data10$end1)
+  cat(max,"\n")
+  segments(0,250-30*i,max,250-30*i,col="grey",lwd=4,lend=1)
+  for (j in 1:dim(data10)[1])
+    {
+    if (isTRUE(data10$direct[j] == "+"))
+      {
+        #segments(data1$start1,250-30*i,data1$start1+3000,250-30*i,col="red",lwd=7,lend=1)
+        arrows(data10$start1[j],data10$height[j],data10$start1[j]+3000,data10$height[j],angle=60,length=0.15,code=1,col=col[data10$X8[j]],lwd=2)
+      }
+    else
+      {
+        #segments(data1$end1,250-30*i,data1$end1-3000,250-30*i,col="red",lwd=7,lend=1)
+        arrows(data10$end1[j],250-30*i,data10$end1[j]-3000,250-30*i,angle=60,length=0.15,code=1,col=col[data10$X8[j]],lwd=2)
+      }
+    }
+  }
+?gird
+
+# 20 random directions at 20 random points
+
+x<- runif( 20)
+y<- runif( 20)
+u<- rnorm( 20)
+v<- rnorm( 20)
+plot( x,y)
+arrow.plot( x,y,u,v) # a default that is unattractive 
+
+plot( x,y, type="n")
+arrow.plot( x,y,u,v, arrow.ex=.2, length=.1, col='green', lwd=2) 
+
+```
+
+# ggplot2作图
+```{r}
+library(ggplot2)
+ggplot(data_use,aes(start1,height))+
+  geom_segment(x=0,y=220,xend=336940,yend=220)
+  geom_segment(x=0,y=250-30*max(data1_1$sample),xend=max(data1_1$start1)+3000,yend=250-30*max(data1_1$sample),size=2)
+  geom_segment(0,250-30*max(data2_1$sample),max(data2_1$start1)+1000)
+  geom_segment(0,250-30*max(data3_1$sample),max(data3_1$start1)+1000)
+  geom_segment(0,250-30*max(data4_1$sample),max(data4_1$start1)+1000)
+  geom_segment(0,250-30*max(data5_1$sample),max(data5_1$start1)+1000)
+  geom_segment(0,250-30*max(data6_1$sample),max(data6_1$start1)+1000)
+  geom_segment(0,250-30*max(data7_1$sample),max(data7_1$start1)+1000)
+```

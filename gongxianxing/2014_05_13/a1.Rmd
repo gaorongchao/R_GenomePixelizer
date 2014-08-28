@@ -1,0 +1,150 @@
+```{r}
+library(grid)
+library(ggplot2)
+data=read.table("data3.txt",header=TRUE)
+dim(data)[1]
+data$height=250-data$sample
+# 数据处理
+for ( i in 1:7)
+  {
+  data1=subset(data,sample==i)
+  min=min(min(data1$start),min(data1$end))
+  for(j in 1:dim(data)[1])
+    {
+    if (isTRUE(data$sample[j]==i))
+      {
+      data$start1[j]=data$start[j]-min+3000
+      data$end1[j]=data$end[j]-min+3000
+      }
+    }
+  }
+max_all=max(data$start1,data$end1)
+
+# 把空白片段删除，而不是把短片段扩增
+data1=subset(data,sample==1)
+data1_1=data1[order(data1$start1),]
+data1_1$sample=8
+data1_1$start1=data1_1$start1+10000
+
+data2=subset(data,sample==2)
+data2_1=data2[order(data2$start1),]
+
+data3=subset(data,sample==3)
+data3_1=data3[order(data3$start1),]
+for ( i in 1:5)
+  {
+  if (data3_1$start1[i]>2800000)
+    {
+    data3_1$start1[i]=data3_1$start1[i]-2800000
+    data3_1$end1[i]=data3_1$end1[i]-2800000
+    }
+  }
+
+data4=subset(data,sample==4)
+data4_1=data4[order(data4$start1),]
+for (i in 1:5)
+  {
+  if (data4_1$start1[i]>2000000)
+    {
+    data4_1$start1[i] = data4_1$start1[i]-2000000
+    data4_1$end1[i] = data4_1$end1[i]-2000000
+    }
+  }
+for (i in 1:5)
+  {
+  if (data4_1$start1[i]>400000)
+    {
+    data4_1$start1[i] = data4_1$start1[i]-100000
+    data4_1$end1[i] = data4_1$end1[i]-100000
+    }
+  }
+data5=subset(data,sample==5)
+data5_1=data5[order(data5$start1),]
+for (i in 1:12)
+  {
+  if (data5_1$start1[i]>2430000)
+    {
+    data5_1$start1[i] = data5_1$start1[i]-2430000
+    data5_1$end1[i] = data5_1$end1[i]-2430000
+    }
+  }
+for (i in 1:12)
+  {
+  if (data5_1$start1[i]>140000)
+    {
+    data5_1$start1[i] = data5_1$start1[i]-140000
+    data5_1$end1[i] = data5_1$end1[i]-140000
+    }
+  }
+for (i in 1:12)
+  {
+  if (data5_1$start1[i]>300000)
+    {
+    data5_1$start1[i] = data5_1$start1[i]-330000
+    data5_1$end1[i] = data5_1$end1[i]-330000
+    }
+  }
+
+data6=subset(data,sample==6)
+data6_1=data6[order(data6$start1),]
+data6_1$start1=10*data6$start1
+data6_1$end1=10*data6$end1
+
+data7=subset(data,sample==7)
+data7_1=data7[order(data7$start1),]
+data7_1$start1=10*data7$start1
+data7_1$end1=10*data7$end1
+
+data_use=rbind(data1_1,data2_1,data3_1,data4_1,data5_1,data6_1,data7_1)
+data_use$height=250-30*data_use$sample
+data_use_1=subset(data_use,direct=="+")
+data_use_1$start2=data_use_1$start1
+data_use_1$end2=data_use_1$start1+2000
+data_use_2=subset(data_use,direct=="-")
+data_use_2$start2=data_use_2$end1
+data_use_2$end2=data_use_2$end1-2000
+
+data_use_3=rbind(data_use_1,data_use_2)
+# 画线
+
+?shape
+m=ggplot(data_use_3,aes(start1,height))+geom_point(shape=17,size=2,aes(colour=factor(data_use_3$X8)))+ylim(-10,205)+xlab("")+ylab("")+theme(axis.text.x=element_blank(),axis.text.y=element_blank())+
+  geom_segment(x=0,y=250-30*max(data1_1$sample),xend=max(data1_1$end1)+3000,yend=250-30*max(data1_1$sample),size=3,colour="grey")+
+  geom_segment(x=0,y=250-30*max(data2_1$sample),xend=max(data2_1$end1)+3000,yend=250-30*max(data2_1$sample),size=3,colour="grey")+
+  geom_segment(x=0,y=250-30*max(data3_1$sample),xend=max(data3_1$end1)+3000,yend=250-30*max(data3_1$sample),size=3,colour="grey")+
+  geom_segment(x=0,y=250-30*max(data4_1$sample),xend=max(data4_1$end1)+3000,yend=250-30*max(data4_1$sample),size=3,colour="grey")+
+  geom_segment(x=0,y=250-30*max(data5_1$sample),xend=max(data5_1$end1)+3000,yend=250-30*max(data5_1$sample),size=3,colour="grey")+
+  geom_segment(x=0,y=250-30*max(data6_1$sample),xend=max(data6_1$end1)+3000,yend=250-30*max(data6_1$sample),size=3,colour="grey")+
+  geom_segment(x=0,y=250-30*max(data7_1$sample),xend=max(data7_1$end1)+3000,yend=250-30*max(data7_1$sample),size=3,colour="grey")+   
+  geom_segment(size=1,aes(x=data_use_3$start2,y=data_use_3$height,xend=data_use_3$end2,yend=data_use_3$height,colour=factor(data_use_3$X8)),arrow=arrow(type="closed",length=unit(0.2,"inches")))+guides(colour=guide_legend(title=NULL,nrow=1,label.position="bottom",size=3,keywidth=6,keyheight=2,label.hjust=0.5))+theme(legend.position=c(0.5,0.05),legend.background=element_blank())+
+  scale_colour_discrete(labels=c("Subfamily1","Subfamily2","Subfamily3","Subfamily4","Subfamily6","NIP"))
+?arrow
+m
+n=m+geom_text(x=10000,y=20,label="Solyc",adj=0,family="serif",fontface="italic",size=7)+
+  geom_text(x=10000,y=200,label="CA",adj=0,family="serif",fontface="italic",size=7)+
+  geom_text(x=10000,y=170,label="Capang1",adj=0,family="serif",fontface="italic",size=7)+
+  geom_text(x=10000,y=140,label="Capang2",adj=0,family="serif",fontface="italic",size=7)+
+  geom_text(x=10000,y=110,label="DMC",adj=0,family="serif",fontface="italic",size=7)+
+  geom_text(x=10000,y=80,label="SB GI 1",adj=0,family="serif",fontface="italic",size=7)+
+  geom_text(x=10000,y=50,label="SB GI 2",adj=0,family="serif",fontface="italic",size=7)
+
+n+theme(legend.text=element_text(size=17))
+n +geom_segment(x=100000,y=163,xend=100000,yend=157,lwd=0.7)+
+  geom_segment(x=105000,y=163,xend=105000,yend=157,lwd=0.7)
+
+```
+
+```{r}
+m=ggplot(data_use_3,aes(start1,height))+geom_point(shape=17,size=2,aes(colour=factor(data_use_3$X8)))+ylim(-10,205)+xlab("")+ylab("")+theme(axis.text.x=element_blank(),axis.text.y=element_blank())+
+  geom_segment(x=0,y=250-30*max(data1_1$sample),xend=max(data1_1$end1)+3000,yend=250-30*max(data1_1$sample),size=3,colour="grey")+
+  geom_segment(x=0,y=250-30*max(data2_1$sample),xend=max(data2_1$end1)+3000,yend=250-30*max(data2_1$sample),size=3,colour="grey")+
+  geom_segment(x=0,y=250-30*max(data3_1$sample),xend=max(data3_1$end1)+3000,yend=250-30*max(data3_1$sample),size=3,colour="grey")+
+  geom_segment(x=0,y=250-30*max(data4_1$sample),xend=max(data4_1$end1)+3000,yend=250-30*max(data4_1$sample),size=3,colour="grey")+
+  geom_segment(x=0,y=250-30*max(data5_1$sample),xend=max(data5_1$end1)+3000,yend=250-30*max(data5_1$sample),size=3,colour="grey")+
+  geom_segment(x=0,y=250-30*max(data6_1$sample),xend=max(data6_1$end1)+3000,yend=250-30*max(data6_1$sample),size=3,colour="grey")+
+  geom_segment(x=0,y=250-30*max(data7_1$sample),xend=max(data7_1$end1)+3000,yend=250-30*max(data7_1$sample),size=3,colour="grey")+   
+  geom_segment(size=1,aes(x=data_use_3$start2,y=data_use_3$height,xend=data_use_3$end2,yend=data_use_3$height,colour=factor(data_use_3$X8),arrow=arrow(type="closed",),size=5))+guides(colour=guide_legend(title=NULL,nrow=1,label.position="bottom",size=3,keywidth=4,keyheight=2,label.hjust=0.5))+theme(legend.position=c(0.5,0.05),legend.background=element_blank())+
+  scale_colour_discrete(labels=c("Subfamily1","Subfamily2","Subfamily3","Subfamily4","Subfamily6","NIP"))
+?arrow
+m
+```

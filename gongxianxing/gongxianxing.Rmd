@@ -1,0 +1,195 @@
+```{r}
+# 读入数据
+data1=read.table("Potato.Chr5.pos",header=TRUE)
+data2=read.table("Tomato.Chr5.pos",header=TRUE)
+chr05=read.table("Pepper.Chr5.pos",header=TRUE)
+
+# 比较染色体的长度
+max_length=max(max(data1$pos),max(data2$pos),max(chr05$pos))
+max_length
+length_data1=max(data1$pos)
+length_data2=max(data2$pos)
+length_chr05=max(chr05$pos)
+length_chr05/length_data1
+length_chr05/length_data2
+
+data1$pos=data1$pos
+data2$pos=data2$pos
+# 画染色体
+plot(0,0,xlim=c(0,max_length),ylim=c(0,60),type="n",axes=FALSE,xlab="",ylab="")
+segments(0,50,max(data1$pos),50,lwd=4,col="grey",lend=1)
+segments(0,30,max(chr05$pos),30,lwd=4,col="grey",lend=1)
+segments(0,10,max(data2$pos),10,lwd=4,col="grey",lend=1)
+
+# 画点
+height1=rep(50,length(data1$pos))
+points(data1$pos,height1,pch=1,cex=0.1,col="red")
+height2=rep(30,length(chr05$pos))
+points(chr05$pos,height2,pch=1,cex=0.1,col="red")
+height3=rep(10,length(data2$pos))
+points(data2$pos,height3,pch=1,cex=0.1,col="red")
+
+# 画连线
+data1$match=as.character(data1$match)
+data2$match=as.character(data2$match)
+chr05$gene=as.character(chr05$gene)
+for (i in 1:dim(data1)[1])
+  {
+  for (j in 1:dim(chr05)[1])
+    {
+    if (isTRUE(data1$match[i] == chr05$gene[j]))
+      {
+      segments(data1$pos[i],50,chr05$pos[j],30,col="blue",lwd=0.1)
+      }
+    }
+  }
+# 第二条
+for (i in 1:dim(data2)[1])
+  {
+  for (j in 1:dim(chr05)[1])
+    {
+    if (isTRUE(data2$match[i] == chr05$gene[j]))
+      {
+      segments(data2$pos[i],10,chr05$pos[j],30,col="blue",lwd=0.1)
+      }
+    }
+  }
+
+
+# highlight
+highlight=read.table("highlight.txt")
+highlight[,1]=as.character(highlight[,1])
+for (i in 1:dim(highlight)[1])
+  {
+  for (j in 1:dim(data1)[1])
+    {
+    if (isTRUE(highlight[i,1] == data1$gene[j]))
+      {
+      points(data1$pos[j],50,pch=18,cex=2,col="red")
+      }
+    }
+  }
+
+for (i in 1:dim(highlight)[1])
+  {
+  for (j in 1:dim(data2)[1])
+    {
+    if (isTRUE(highlight[i,1] == data2$gene[j]))
+      {
+      points(data2$pos[j],10,pch=18,cex=2,col="red")
+      }
+    }
+  }
+
+for (i in 1:dim(highlight)[1])
+  {
+  for (j in 1:dim(chr05)[1])
+    {
+    if (isTRUE(highlight[i,1] == chr05$gene[j]))
+      {
+      points(chr05$pos[j],30,pch=18,cex=2,col="red")
+      }
+    }
+  }
+
+```
+
+```{r}
+# 读入数据
+data1=read.table("Potato.Chr6.pos",header=TRUE)
+data2=read.table("Tomato.Chr6.pos",header=TRUE)
+chr06=read.table("Pepper.Chr6.pos",header=TRUE)
+
+# 比较染色体的长度
+max_length=max(max(data1$pos),max(data2$pos),max(chr06$pos))
+max_length
+(length_data1=max(data1$pos))
+(length_data2=max(data2$pos))
+(length_chr06=max(chr06$pos))
+
+length_chr06/length_data1
+length_chr06/length_data2
+
+data1$pos=data1$pos
+data2$pos=data2$pos
+
+# 画染色体
+plot(0,0,xlim=c(0,max_length),ylim=c(0,60),type="n",axes=FALSE,xlab="",ylab="")
+segments(0,50,max(data1$pos),50,lwd=4,col="grey",lend=1)
+segments(0,30,max(chr06$pos),30,lwd=4,col="grey",lend=1)
+segments(0,10,max(data2$pos),10,lwd=4,col="grey",lend=1)
+
+# 画点
+height1=rep(50,length(data1$pos))
+points(data1$pos,height1,pch=1,cex=0.1,col="red")
+height2=rep(30,length(chr06$pos))
+points(chr06$pos,height2,pch=1,cex=0.1,col="red")
+height3=rep(10,length(data2$pos))
+points(data2$pos,height3,pch=1,cex=0.1,col="red")
+
+# 画连线
+data1$match=as.character(data1$match)
+data2$match=as.character(data2$match)
+chr06$gene=as.character(chr06$gene)
+for (i in 1:dim(data1)[1])
+  {
+  for (j in 1:dim(chr06)[1])
+    {
+    if (isTRUE(data1$match[i] == chr06$gene[j]))
+      {
+      segments(data1$pos[i],50,chr06$pos[j],30,col="blue",lwd=0.1)
+      }
+    }
+  }
+# 第二条
+for (i in 1:dim(data2)[1])
+  {
+  for (j in 1:dim(chr06)[1])
+    {
+    if (isTRUE(data2$match[i] == chr06$gene[j]))
+      {
+      segments(data2$pos[i],10,chr06$pos[j],30,col="blue",lwd=0.1)
+      }
+    }
+  }
+
+# highlight
+highlight=read.table("highlight.txt")
+highlight[,1]=as.character(highlight[,1])
+for (i in 1:dim(highlight)[1])
+  {
+  for (j in 1:dim(data1)[1])
+    {
+    if (isTRUE(highlight[i,1] == data1$gene[j]))
+      {
+      points(data1$pos[j],50,pch=18,cex=2,col="red")
+      cat(1)
+      }
+    }
+  }
+for (i in 1:dim(highlight)[1])
+  {
+  for (j in 1:dim(data2)[1])
+    {
+    if (isTRUE(highlight[i,1] == data2$gene[j]))
+      {
+      points(data2$pos[j],10,pch=18,cex=2,col="red")
+      cat(1)
+      }
+    }
+  }
+
+for (i in 1:dim(highlight)[1])
+  {
+  for (j in 1:dim(chr06)[1])
+    {
+    if (isTRUE(highlight[i,1] == chr06$gene[j]))
+      {
+      points(chr06$pos[j],30,pch=18,cex=2,col="red")
+      }
+    }
+  }
+
+```
+
+
