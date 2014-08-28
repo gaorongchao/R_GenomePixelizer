@@ -9,4 +9,5 @@ chr_height=round(y/chr_num,0)
 chr_thick=as.numeric(need["chr_thick",1])
 segments(5,chr_height*(chr_num+1-chr$chr)-chr_height/2,5+chr$length,chr_height*(chr_num+1-chr$chr)-chr_height/2,col=need["chr_color",1],lwd=chr_thick)
 chr=ggplot()
+# test
 ```
